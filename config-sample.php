@@ -1,5 +1,47 @@
 <?php
-
+return [
+	'debug' => false,
+	'title' => '',
+	'layout' => [
+		'logo' => '',
+	],
+	'event' => [
+		'name' => 'Meu Evento',
+		'site' => 'site-do-evento.com.br'
+	],
+	'adapter' => [
+		'json' => [
+			'file' => 'json-sample.json'
+		],
+		'array' => [
+			'file' => 'path/to/file/array.php'
+		],
+		'csv' => [
+			'file' => 'path/to/file/array.php'
+		],
+		'database' => [
+			'host' => '',
+			'name' => '',
+			'user' => '',
+			'pass' => '',
+		],
+	],
+	'base_path' => '',
+	'cache_dir' => '',
+	'cache_path' => '',
+	'img' => [
+		'name' => [
+			'font' => '',
+			'font_size' => '',
+			'top_pixels' => '',
+		],
+		'data' => [
+			'font' => '',
+			'font_size' => '',
+			'top_pixels' => '',
+		]
+	]
+];
 /* Set this if you would like to display errors and warning messages. */
 define('DEBUG', false);
 

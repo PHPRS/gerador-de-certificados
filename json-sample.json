@@ -1,0 +1,14 @@
+{
+	"attendee": [
+		{
+			"id": "1",
+			"name": "Daniel Archer",
+			"email": "contato@danielcramer.com.br"
+		},
+		{
+			"id": "2",
+			"name": "João da Silva",
+			"email": "contato@joao.com.br"
+		}
+	]
+}

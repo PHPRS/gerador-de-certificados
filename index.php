@@ -1,8 +1,58 @@
 <?php
+require 'autoload.php';
 
-require('config.php');
+$config = include 'config-sample.php';
 
-init();
+class Application {
+    public function __construct($contig) {
+        $this->config = $config;
+    }
+
+    public function init() {
+        
+    }
+}
+
+$template = new TemplateEngine('layout/template.phtml');
+
+$template->set('title', $config['layout']['title']);
+$template->set('form', '');
+$template->set('content', '');
+
+if (empty($_POST['email'])) {
+    $template->set('form', (new TemplateEngine('layout/form.phtml'))->output());
+    echo $template->output();
+    return;
+}
+
+$email = filter_var($_POST['email'], FILTER_SANITIZE_STRING);
+
+$adapter = new JsonAdapter($config['adapter']['json']);
+$usuario = $adapter->find($email);
+if (!$usuario) {
+    $template->set('content', 'não achei nada');
+    echo $template->output();
+    return;
+}
+
+$content = new TemplateEngine('layout/certificate.phtml');
+$content->set('first_name', $usuario->name);
+$content->set('event_name', $config['event']['name']);
+$content->set('event_site', $config['event']['site']);
+
+$template->set('content', $content->output());
+
+echo $template->output();
+
+exit;
+
+
+$config = require 'config.php';
+
+if ($config['debug']) {
+    ini_set('display_errors', true);
+    error_reporting(E_ALL);
+}
 
 if (isset($_REQUEST['email']) && $_REQUEST['email']) {
 
@@ -34,6 +84,7 @@ if (isset($_REQUEST['email']) && $_REQUEST['email']) {
 
 }
 ?>
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Frameset//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-frameset.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="pt-BR" lang="pt-BR" dir="ltr">
 <head>
