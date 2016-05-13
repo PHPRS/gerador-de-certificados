@@ -1,90 +1,40 @@
 <?php
 require 'autoload.php';
+require 'config-sample.php';
 
-$config = include 'config-sample.php';
+if (DEBUG) error_reporting(E_ALL);
 
-class Application {
-    public function __construct($contig) {
-        $this->config = $config;
-    }
+# you can utilize a Json adapter
+$adapter = new JsonAdapter(JSON_FILE);
 
-    public function init() {
-        
-    }
-}
+# or a mysql adapter
+# $adapter = new MysqlAdapter(DB_HOST, DB_NAME, DB_USER, DB_PASS);
 
-$template = new TemplateEngine('layout/template.phtml');
+# feel free for create more adapters!
 
-$template->set('title', $config['layout']['title']);
-$template->set('form', '');
-$template->set('content', '');
+if (!empty($_POST['email'])) {
 
-if (empty($_POST['email'])) {
-    $template->set('form', (new TemplateEngine('layout/form.phtml'))->output());
-    echo $template->output();
-    return;
-}
-
-$email = filter_var($_POST['email'], FILTER_SANITIZE_STRING);
-
-$adapter = new JsonAdapter($config['adapter']['json']);
-$usuario = $adapter->find($email);
-if (!$usuario) {
-    $template->set('content', 'não achei nada');
-    echo $template->output();
-    return;
-}
-
-$content = new TemplateEngine('layout/certificate.phtml');
-$content->set('first_name', $usuario->name);
-$content->set('event_name', $config['event']['name']);
-$content->set('event_site', $config['event']['site']);
-
-$template->set('content', $content->output());
-
-echo $template->output();
-
-exit;
-
-
-$config = require 'config.php';
-
-if ($config['debug']) {
-    ini_set('display_errors', true);
-    error_reporting(E_ALL);
-}
-
-if (isset($_REQUEST['email']) && $_REQUEST['email']) {
-
-    $email = trim($_REQUEST['email']);
-
-    if (!$infos = get_info_from_email($email))
-        $infos = array();
-
-    $first_name = '';
+    $email = filter_var($_POST['email'], FILTER_SANITIZE_STRING);
+    $results = $adapter->find($email);
     $images = array();
 
-    foreach ($infos as $info) {
-
-        if (empty($first_name)) {
-            $first_name = explode(' ', $info['name']);
-            $first_name = utf8_encode($first_name[0]);
-        }
-
-        if (!DEBUG && is_file(CACHE_PATH . '/' . $info['file'])) {
-            $images[] = CACHE_DIR . '/' . $info['file'];
+    foreach ($results as $attendee) {
+        
+        $first_name = explode(' ', $attendee['name'])[0];
+        
+        if (is_file(CACHE_PATH . '/' . $attendee['file'])) {
+            $images[] = CACHE_DIR . '/' . $attendee['file'];
             continue;
         }
 
-        $info['name'] = strtoupper(remove_accents($info['name']));
-        $info['bg_file'] = 'img/bg-' . $info['type'] . '.png';
-        $images[] = generate_image($info);
+        $attendee['name'] = strtoupper(remove_accents($attendee['name']));
+        $attendee['bg_file'] = 'img/bg-' . $attendee['type'] . '.png';
+        $images[] = generate_image($attendee);
 
     }
 
 }
 ?>
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Frameset//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-frameset.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="pt-BR" lang="pt-BR" dir="ltr">
 <head>
@@ -107,7 +57,7 @@ if (isset($_REQUEST['email']) && $_REQUEST['email']) {
         <?php if (!empty($images) && is_array($images)) : ?>
 
             <p>
-                Obrigado por participar do WordCamp Curitiba 2012!
+                Obrigado por participar do <?php echo EVENT_NAME ?>!
                 <?php if (count($images) > 1) : ?>
                     Aqui estão seus certificados.
                 <?php else : ?>
@@ -117,7 +67,7 @@ if (isset($_REQUEST['email']) && $_REQUEST['email']) {
 
             <p>
                 Qualquer problema, basta entrar em
-                 <a href="http://2012.curitiba.wordcamp.org/">contato</a>.
+                 <a href="<?php echo CONTACT_LINK ?>">contato</a>.
             </p>
 
             <div class="items">
@@ -135,7 +85,7 @@ if (isset($_REQUEST['email']) && $_REQUEST['email']) {
 
         <?php else : ?>
 
-            <?php if (isset($_REQUEST['email'])) : ?>
+            <?php if (isset($_POST['email'])) : ?>
                 <p>
                     Não foi possível encontrar o seu e-mail. Caso você
                     continue tendo este problema, por favor entre em
@@ -145,7 +95,7 @@ if (isset($_REQUEST['email']) && $_REQUEST['email']) {
                 </p>
             <?php endif; ?>
 
-            <form name="emailinfo" action="" method="GET">
+            <form name="emailinfo" action="" method="POST">
                 <p>
                     Digite o e-mail que você cadastrou no formulário
                     de inscrição do evento:

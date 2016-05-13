@@ -1,57 +1,6 @@
 <?php
 
-function init() {
-
-    if (DEBUG) {
-        ini_set('display_errors', true);
-        error_reporting(~0);
-    }
-
-    global $db;
-
-    $db = connect();
-}
-
-function connect() {
-    $socket = new PDO('mysql:host=' . DB_HOST . ';dbname=' . DB_NAME,
-        DB_USER, DB_PASS);
-    $socket->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
-    return $socket;
-}
-
-function get_info_from_email($email) {
-
-    if (!$email)
-        return false;
-
-    global $db;
-
-    $sql = "
-        SELECT
-            id,
-            name,
-            email,
-            type,
-            data,
-            file
-        FROM
-            attendee
-        WHERE 1=1
-            AND email = '{$email}'
-    ";
-
-    if (!$info = $db->query($sql))
-        return false;
-
-    if (!$info = $info->fetchAll())
-        return false;
-
-    return $info;
-
-}
-
-function imagecalculatecenter ($image_width, $image_height,
-    $text, $fontFile, $fontSize, $fontAngle) {
+function imagecalculatecenter ($image_width, $image_height, $text, $fontFile, $fontSize, $fontAngle) {
 
     $rect = imagettfbbox($fontSize,$fontAngle,$fontFile,$text);
 
@@ -77,14 +26,15 @@ function imagecalculatecenter ($image_width, $image_height,
 
 function generate_image($args = false) {
 
-    global $db;
-
     $img_file = sha1($args['name'] . $args['bg_file']) . '.png';
     $img_path = CACHE_PATH . '/' . $img_file;
 
     $angle = 0;
-
+    if ( ! file_exists($args['bg_file'])) {
+        die('arquivo background não existe');
+    }
     $img = imagecreatefrompng($args['bg_file']);
+
     $white = imagecolorallocate($img, 255, 255, 255);
 
     $image_width = imagesx($img);
@@ -129,13 +79,14 @@ function generate_image($args = false) {
 
     imagepng($img, $img_path);
 
-    $sql = "
-        UPDATE attendee
-        SET file = '{$img_file}'
-        WHERE id = '{$args['id']}'
-    ";
-    if (!$db->query($sql))
-        return false;
+    # transfer responsability to adapter
+    # $sql = "
+    #     UPDATE attendee
+    #     SET file = '{$img_file}'
+    #     WHERE id = '{$args['id']}'
+    # ";
+    # if (!$db->query($sql))
+    #     return false;
     return CACHE_DIR . '/' . $img_file;
 
 }

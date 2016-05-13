@@ -1,53 +1,13 @@
 <?php
-return [
-	'debug' => false,
-	'title' => '',
-	'layout' => [
-		'logo' => '',
-	],
-	'event' => [
-		'name' => 'Meu Evento',
-		'site' => 'site-do-evento.com.br'
-	],
-	'adapter' => [
-		'json' => [
-			'file' => 'json-sample.json'
-		],
-		'array' => [
-			'file' => 'path/to/file/array.php'
-		],
-		'csv' => [
-			'file' => 'path/to/file/array.php'
-		],
-		'database' => [
-			'host' => '',
-			'name' => '',
-			'user' => '',
-			'pass' => '',
-		],
-	],
-	'base_path' => '',
-	'cache_dir' => '',
-	'cache_path' => '',
-	'img' => [
-		'name' => [
-			'font' => '',
-			'font_size' => '',
-			'top_pixels' => '',
-		],
-		'data' => [
-			'font' => '',
-			'font_size' => '',
-			'top_pixels' => '',
-		]
-	]
-];
+
 /* Set this if you would like to display errors and warning messages. */
 define('DEBUG', false);
 
 /* The title for the generated web pages.
  * You probably want to put the title of your event here. */
 define('TITLE', 'Your Page Title');
+define('EVENT_NAME', 'WordCamp Curitiba 2012');
+define('CONTACT_LINK', 'http://2012.curitiba.wordcamp.org/');
 
 /* The logo of the event.
  * It's 120px height if you don't want to adjust the webpage's CSS. */
@@ -59,6 +19,8 @@ define('DB_HOST', 'localhost');
 define('DB_NAME', 'your_db');
 define('DB_USER', 'your_db_user');
 define('DB_PASS', 'your_db_password');
+
+define('JSON_FILE', 'json-sample.json');
 
 /* Don't touch this unless you know what you're doing. */
 define('BASE_PATH', dirname(__FILE__));

@@ -2,13 +2,30 @@
 	"attendee": [
 		{
 			"id": "1",
-			"name": "Daniel Archer",
-			"email": "contato@danielcramer.com.br"
+			"name": "Lorem Ipsum",
+			"file": "",
+			"type": "attendee",
+			"bg_file": "teste",
+			"data": "10 hours",
+			"email": "first@example.com"
 		},
 		{
 			"id": "2",
-			"name": "João da Silva",
-			"email": "contato@joao.com.br"
+			"name": "Lorem Ipsum",
+			"file": "",
+			"type": "speaker",
+			"bg_file": "teste",
+			"data": "Presentation Title",
+			"email": "first@example.com"
+		},
+		{
+			"id": "3",
+			"name": "Dollor Sit Amnet",
+			"file": "",
+			"type": "attendee",
+			"bg_file": "teste",
+			"data": "20 hours",
+			"email": "second@example.com"
 		}
 	]
 }

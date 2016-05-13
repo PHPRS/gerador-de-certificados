@@ -1,15 +1,23 @@
 <?php 
-class JsonAdapter {
-    public function __construct($config) {
-        $this->file = json_decode(file_get_contents($config['file']));
+
+class JsonAdapter implements Adapter {
+    
+    private $file;
+
+    public function __construct($file) {
+        $this->file = json_decode(file_get_contents($file));
     }
 
     public function find($email) {
+        
+        $result = array();
+
         foreach ($this->file->attendee as $attendee) {
             if ($attendee->email == $email) {
-                return $attendee;
+                $result[] = (array) $attendee;
             }
         } 
-        return null;
+
+        return $result;
     }
 }
