@@ -20,6 +20,7 @@ Estes scripts foram até então usados nos WordCamps
 
  * PHP >= 5.3 com a extensão GD
  * ~~MySQL >= 4~~
+ * Adapters para Json e Mysql
 
 
 ## Instalando e configurando
@@ -40,7 +41,6 @@ com as instruções dentro dele.
 Crie uma pasta `cache` e certifique-se que o usuário web tem permissão de
 escrita nela. Em todo caso:
 
-    mkdir cache
     chmod 777 cache
 
 Você provavelmente vai querer mudar as mensagens no `index.php` também.
@@ -52,6 +52,8 @@ pré-definidos para inserção dos dados em forma de texto. Estes templates
 precisam ficar na pasta `img/bg-<certificate type>.png`. A localização em que o
 texto fica na imagem está no arquivo `config.php` nas constantes `IMG_NAME_*` e
 `IMG_DATA_*`.
+
+* Adicionado modelo de bg-speaker.png e bg-attendee.png para facilitar a utilização.
 
 ![Certificate Template](https://github.com/vmassuchetto/certificate-generator/raw/master/doc/certificate-template.png)
 
@@ -115,7 +117,8 @@ This application was initially used for [WordCamps](http://wordcamp.org) in Braz
 ## Requirements
 
  * PHP >= 5.1.2 with GD
- * MySQL >= 4
+ * ~~MySQL >= 4~~
+ * Create your own adapter!
 
 ## Installing and Configuring
 
@@ -136,7 +139,6 @@ instructions in the file.
 Create a `cache` directory and give it write permission. You can change this
 location in `config.php`.
 
-    mkdir cache
     chmod 777 cache
 
 You'll propably want to edit `index.php` messages for your language and
