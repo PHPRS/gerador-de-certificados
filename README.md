@@ -18,8 +18,8 @@ Estes scripts foram até então usados nos WordCamps
 
 ## Softwares necessários
 
- * PHP >= 5.1.2 com a extensão GD
- * MySQL >= 4
+ * PHP >= 5.3 com a extensão GD
+ * ~~MySQL >= 4~~
 
 
 ## Instalando e configurando
